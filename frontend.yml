@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gofood-frontend-deployment
+  labels:
+    app: gofood-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gofood-frontend
+  template:
+    metadata:
+      labels:
+        app: gofood-frontend
+    spec:
+      containers:
+        - name: gofood-frontend
+          image: nafiursan/mern-frontend:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gofood-frontend-service
+spec:
+  selector:
+    app: gofood-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
