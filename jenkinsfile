@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    stages {
+        
+        //clone the repo
+        stage('Git Clone') {
+            steps {
+                // Clone the Git repository
+                git branch: 'main', url: 'https://github.com/nafiursan/mern_backend.git'
+            }
+        }
+        //
+        stage('create docker image') {
+            steps {
+                  script {
+                // 
+                docker.build("nafiursan/mern:latest")
+                  }
+                
+            }
+        }
+        //=================
+ 
+
+  
+        //=================
+                stage('push to docker') {
+            steps {
+                  script {
+                 withDockerRegistry(credentialsId: 'dockerhub') {
+                def imageName = "nafiursan/mern:latest"
+                docker.image(imageName).push()
+                  }
+                
+            }
+        }
+        
+        }
+        //=========
+        
+        
+        
+    
+        
+   }     
+}  
